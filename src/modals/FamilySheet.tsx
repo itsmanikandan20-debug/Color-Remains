@@ -38,7 +38,7 @@ export function FamilySheet({ state, derived, actions }: {
             </div>
           )}
           {sheetItems.map((i) => (
-            <div key={i.raw.id} onClick={() => actions.openEntry(i.raw)} style={{ display: 'flex', gap: 13, alignItems: 'center', paddingBottom: 13, borderBottom: `1px solid ${ink(0.07)}`, cursor: 'pointer' }}>
+            <div key={i.raw.id} onClick={() => actions.patch({ detailHex: i.hex, familyOpen: null })} style={{ display: 'flex', gap: 13, alignItems: 'center', paddingBottom: 13, borderBottom: `1px solid ${ink(0.07)}`, cursor: 'pointer' }}>
               <div style={{ position: 'relative', width: 52, height: 52, borderRadius: 11, flex: 'none', boxShadow: `inset 0 0 0 1px ${ink(0.13)}`, background: i.hex }}>
                 {i.count > 1 && (
                   <div style={{ position: 'absolute', bottom: 3, right: 3, minWidth: 15, height: 15, padding: '0 3px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -54,7 +54,7 @@ export function FamilySheet({ state, derived, actions }: {
                 <div style={{ fontSize: 12.5, lineHeight: 1.4, marginTop: 3 }}>{i.note}</div>
                 <div style={{ fontSize: 9.5, color: ink(0.42), marginTop: 3 }}>{i.dateLabel}</div>
               </div>
-              <span style={{ fontSize: 10, color: ink(0.35), flex: 'none' }}>Edit</span>
+              <span style={{ fontSize: 10, color: ink(0.35), flex: 'none' }}>View</span>
             </div>
           ))}
         </div>
