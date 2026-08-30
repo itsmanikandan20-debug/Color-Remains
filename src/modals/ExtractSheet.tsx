@@ -1,7 +1,7 @@
 import type { AppState } from '../types';
 import type { AppActions } from '../state/useAppState';
 import type { Derived } from '../state/useDerived';
-import { ink, INK, inputStyle, scrim, favToggleButton } from '../ui/tokens';
+import { ink, INK, inputStyle, scrim } from '../ui/tokens';
 
 export function ExtractSheet({ state, derived, actions }: {
   state: AppState;
@@ -9,7 +9,7 @@ export function ExtractSheet({ state, derived, actions }: {
   actions: AppActions;
 }) {
   if (!state.extractOpen) return null;
-  const { selectedCount, allSelected, batchFav } = derived;
+  const { selectedCount, allSelected, countByHex } = derived;
   const close = () => actions.patch({ extractOpen: false });
 
   const toggle = (hex: string) => {
@@ -78,7 +78,13 @@ export function ExtractSheet({ state, derived, actions }: {
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
                 {state.extractDupes.map((hex) => (
                   <div key={hex} onClick={() => actions.openAddUsage(hex)} style={{ opacity: 0.7, cursor: 'pointer' }}>
-                    <div style={{ aspectRatio: '1', borderRadius: 10, background: hex, boxShadow: `inset 0 0 0 1px ${ink(0.12)}`, filter: 'grayscale(.4)' }} />
+                    <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 10, background: hex, boxShadow: `inset 0 0 0 1px ${ink(0.12)}`, filter: 'grayscale(.4)' }}>
+                      {countByHex[hex] > 1 && (
+                        <div style={{ position: 'absolute', bottom: 3, right: 3, minWidth: 15, height: 15, padding: '0 3px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          ×{countByHex[hex]}
+                        </div>
+                      )}
+                    </div>
                     <div style={{ fontSize: 8, color: ink(0.45), marginTop: 4, textAlign: 'center' }}>+ Add use</div>
                   </div>
                 ))}
@@ -88,15 +94,12 @@ export function ExtractSheet({ state, derived, actions }: {
         </div>
 
         <div style={{ paddingTop: 14, borderTop: `1px solid ${ink(0.09)}` }}>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
-            <input
-              value={state.batchNote}
-              onChange={(e) => actions.patch({ batchNote: e.target.value })}
-              placeholder="Project/Design name"
-              style={{ ...inputStyle, flex: 1, minWidth: 0 }}
-            />
-            <button onClick={() => actions.patch((s) => ({ batchFav: !s.batchFav }))} title="Mark all as favorite" style={favToggleButton(batchFav)}>{batchFav.glyph}</button>
-          </div>
+          <input
+            value={state.batchNote}
+            onChange={(e) => actions.patch({ batchNote: e.target.value })}
+            placeholder="Project/Design name"
+            style={inputStyle}
+          />
           <button
             onClick={() => actions.addBatch()}
             style={{ width: '100%', marginTop: 9, padding: '13px 0', border: 'none', borderRadius: 11, fontSize: 13.5, fontWeight: 500, cursor: 'pointer', background: selectedCount ? INK : ink(0.09), color: selectedCount ? '#FFFFFF' : ink(0.4) }}

@@ -8,7 +8,7 @@ export function FamilySheet({ state, derived, actions }: {
   derived: Extract<Derived, { acc: NonNullable<Derived['acc']> }>;
   actions: AppActions;
 }) {
-  const { sheetName, sheetItems, sheetEmpty, sheetEmptyNote } = derived;
+  const { sheetName, sheetItems, sheetEmpty, sheetEmptyNote, countByHex } = derived;
   if (!sheetName) return null;
   const close = () => actions.patch({ familyOpen: null });
 
@@ -38,8 +38,14 @@ export function FamilySheet({ state, derived, actions }: {
             </div>
           )}
           {sheetItems.map((i) => (
-            <div key={i.hex} onClick={() => actions.openEntry(i.raw)} style={{ display: 'flex', gap: 13, alignItems: 'center', paddingBottom: 13, borderBottom: `1px solid ${ink(0.07)}`, cursor: 'pointer' }}>
-              <div style={{ width: 52, height: 52, borderRadius: 11, flex: 'none', boxShadow: `inset 0 0 0 1px ${ink(0.13)}`, background: i.hex }} />
+            <div key={i.raw.id} onClick={() => actions.openEntry(i.raw)} style={{ display: 'flex', gap: 13, alignItems: 'center', paddingBottom: 13, borderBottom: `1px solid ${ink(0.07)}`, cursor: 'pointer' }}>
+              <div style={{ position: 'relative', width: 52, height: 52, borderRadius: 11, flex: 'none', boxShadow: `inset 0 0 0 1px ${ink(0.13)}`, background: i.hex }}>
+                {countByHex[i.hex] > 1 && (
+                  <div style={{ position: 'absolute', bottom: 3, right: 3, minWidth: 15, height: 15, padding: '0 3px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    ×{countByHex[i.hex]}
+                  </div>
+                )}
+              </div>
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <span style={{ fontSize: 11.5, letterSpacing: '.04em' }}>{i.hex}</span>

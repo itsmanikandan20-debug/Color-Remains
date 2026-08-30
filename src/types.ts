@@ -70,5 +70,4 @@ export type AppState = {
   extractDupes: string[];
   extractPicked: Record<string, boolean>;
   batchNote: string;
-  batchFav: boolean;
 };

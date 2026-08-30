@@ -63,7 +63,7 @@ const initialState: AppState = {
 
   gridFilter: 'newest', favSheetOpen: false,
 
-  extractOpen: false, extractNew: [], extractDupes: [], extractPicked: {}, batchNote: '', batchFav: false,
+  extractOpen: false, extractNew: [], extractDupes: [], extractPicked: {}, batchNote: '',
 };
 
 export function useAppState() {
@@ -216,12 +216,11 @@ export function useAppState() {
       count = chosen.length;
       firstHex = chosen[0];
       const note = st.batchNote.trim() || 'No note';
-      const entries: LogEntry[] = chosen.map((hex) => ({ id: genId(), hex, note, date: st.date, fav: st.batchFav }));
+      const entries: LogEntry[] = chosen.map((hex) => ({ id: genId(), hex, note, date: st.date }));
       return {
         ...st,
         account: { ...st.account, log: [...entries, ...st.account.log] },
         extractOpen: false,
-        batchFav: false,
       };
     });
     if (count) toast(count + ' colors added', firstHex);

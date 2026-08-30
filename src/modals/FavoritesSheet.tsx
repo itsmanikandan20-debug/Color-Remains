@@ -9,7 +9,7 @@ export function FavoritesSheet({ state, derived, actions }: {
   actions: AppActions;
 }) {
   if (!state.favSheetOpen) return null;
-  const { favCountLabel, noFavs, favItems } = derived;
+  const { favCountLabel, noFavs, favItems, countByHex } = derived;
   const close = () => actions.patch({ favSheetOpen: false });
 
   return (
@@ -36,8 +36,14 @@ export function FavoritesSheet({ state, derived, actions }: {
             </div>
           )}
           {favItems.map((f) => (
-            <div key={f.hex} onClick={() => actions.openEntry(f.raw)} style={{ display: 'flex', gap: 13, alignItems: 'center', paddingBottom: 13, borderBottom: `1px solid ${ink(0.07)}`, cursor: 'pointer' }}>
-              <div style={{ width: 52, height: 52, borderRadius: 11, flex: 'none', boxShadow: `inset 0 0 0 1px ${ink(0.13)}`, background: f.hex }} />
+            <div key={f.raw.id} onClick={() => actions.openEntry(f.raw)} style={{ display: 'flex', gap: 13, alignItems: 'center', paddingBottom: 13, borderBottom: `1px solid ${ink(0.07)}`, cursor: 'pointer' }}>
+              <div style={{ position: 'relative', width: 52, height: 52, borderRadius: 11, flex: 'none', boxShadow: `inset 0 0 0 1px ${ink(0.13)}`, background: f.hex }}>
+                {countByHex[f.hex] > 1 && (
+                  <div style={{ position: 'absolute', bottom: 3, right: 3, minWidth: 15, height: 15, padding: '0 3px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    ×{countByHex[f.hex]}
+                  </div>
+                )}
+              </div>
               <div style={{ minWidth: 0, flex: 1 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
                   <span style={{ fontSize: 11.5, letterSpacing: '.04em' }}>{f.hex}</span>

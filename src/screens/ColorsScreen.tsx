@@ -148,9 +148,8 @@ export function ColorsScreen({
                 onClick={handleSample}
                 style={{ width: '100%', height: '190px', objectFit: 'contain', display: 'block', cursor: 'crosshair', borderRadius: 6 }}
               />
-              <div style={{ position: 'absolute', top: 8, left: 8, display: 'flex', alignItems: 'center', gap: 5, padding: '5px 9px 5px 7px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', pointerEvents: 'none' }}>
-                <EyedropperIcon size={12} />
-                <span style={{ fontSize: 10 }}>Eyedropper</span>
+              <div style={{ position: 'absolute', top: 8, left: 8, width: 26, height: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%', background: 'rgba(28,27,26,.72)', color: '#FFFFFF', pointerEvents: 'none' }}>
+                <EyedropperIcon size={13} />
               </div>
               {pickPoint && (
                 <div

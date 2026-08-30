@@ -52,6 +52,11 @@ export function useDerived(state: AppState) {
     if (state.gridFilter === 'most') colorGroups.sort((a, b) => b.count - a.count);
     else if (state.gridFilter === 'least') colorGroups.sort((a, b) => a.count - b.count);
 
+    // How many times each color has been used, looked up wherever a swatch
+    // for that color shows up (grid, family/favorites lists, extract dupes).
+    const countByHex: Record<string, number> = {};
+    colorGroups.forEach((g) => { countByHex[g.hex] = g.count; });
+
     const selectedCount = state.extractNew.filter((x) => state.extractPicked[x]).length;
     const allSelected = state.extractNew.length > 0 && selectedCount === state.extractNew.length;
 
@@ -117,6 +122,7 @@ export function useDerived(state: AppState) {
       header: headers[state.screen],
 
       colorGroups,
+      countByHex,
       isEmpty: colorGroups.length === 0,
       emptyTitle: 'Nothing logged yet',
       emptyNote: 'Pick a color above and mark it as used. Every entry finds its own family.',
@@ -127,7 +133,6 @@ export function useDerived(state: AppState) {
       favItems,
 
       fav: starStyle(state.fav),
-      batchFav: starStyle(state.batchFav),
       entryFav: starStyle(state.entryFav),
     } as const;
   }, [state]);

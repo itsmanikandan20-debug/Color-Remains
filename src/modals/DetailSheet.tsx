@@ -44,10 +44,7 @@ export function DetailSheet({ state, derived, actions }: {
           {detailEntries.map((e) => (
             <div key={e.id} onClick={() => actions.openEntry(e)} style={{ display: 'flex', gap: 10, alignItems: 'center', paddingBottom: 12, borderBottom: `1px solid ${ink(0.06)}`, cursor: 'pointer' }}>
               <div style={{ minWidth: 0, flex: 1 }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-                  <span style={{ fontSize: 12.5, lineHeight: 1.4 }}>{e.note}</span>
-                  {e.fav && <span style={{ fontSize: 10, lineHeight: 1, color: INK }}>★</span>}
-                </div>
+                <div style={{ fontSize: 12.5, lineHeight: 1.4 }}>{e.note}</div>
                 <div style={{ fontSize: 9.5, color: ink(0.42), marginTop: 3 }}>{new Date(e.date).toLocaleDateString()}</div>
               </div>
               <span style={{ fontSize: 10, color: ink(0.35), flex: 'none' }}>Edit</span>
