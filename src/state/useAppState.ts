@@ -4,7 +4,7 @@ import { hexToRgb, rgbToHsv, hsvToHex, todayISO, type LogEntry } from '../lib/co
 import { SAMPLE } from '../lib/sampleData';
 import { extractColors, sampleImageAt, readImageFile } from '../lib/extract';
 
-const DEMO_EMAIL = 'maya@studio.com';
+const DEMO_EMAIL = 'mani@studio.com';
 
 function nameFromEmail(email: string): string {
   const local = email.split('@')[0] || 'Designer';
@@ -19,12 +19,12 @@ function createAccount(email: string): Account {
   const isDemo = email.toLowerCase() === DEMO_EMAIL;
   return {
     email,
-    name: isDemo ? 'Maya Ferreira' : nameFromEmail(email),
+    name: isDemo ? 'Mani' : nameFromEmail(email),
     bio: isDemo
       ? 'Product designer. Ten years of apps, posters and identities. Keeping an honest record of what I actually reach for.'
       : 'Say something about your design work.',
     avatar: null,
-    joined: isDemo ? '2024-02-11' : todayISO(),
+    joined: isDemo ? '2023-11-01' : todayISO(),
     // Every fresh account starts with sample data so the balance dashboard
     // reads real right away — this is a click-through prototype, not a blank app.
     log: SAMPLE.map((c) => ({ ...c })),

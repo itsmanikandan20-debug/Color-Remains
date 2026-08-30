@@ -55,7 +55,7 @@ export function AuthScreen({ state, actions }: { state: AppState; actions: AppAc
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 9 }}>
         <button
-          onClick={() => actions.signIn('maya@studio.com', true)}
+          onClick={() => actions.signIn('mani@studio.com', true)}
           style={{ width: '100%', padding: '12px 0', border: `1px solid ${ink(0.18)}`, borderRadius: 11, background: '#FAFAFA', fontSize: 13, color: INK, cursor: 'pointer' }}
         >
           Continue with Google

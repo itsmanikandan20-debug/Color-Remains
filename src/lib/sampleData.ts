@@ -29,9 +29,9 @@ export const SAMPLE: LogEntry[] = [
 ];
 
 export const DEMO_ACCOUNT = {
-  name: 'Maya Ferreira',
-  email: 'maya@studio.com',
+  name: 'Mani',
+  email: 'mani@studio.com',
   bio: 'Product designer. Ten years of apps, posters and identities. Keeping an honest record of what I actually reach for.',
   avatar: null as string | null,
-  joined: '2024-02-11',
+  joined: '2023-11-01',
 };
