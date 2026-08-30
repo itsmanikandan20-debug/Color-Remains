@@ -13,11 +13,11 @@ function PaletteIcon({ size = 22 }: { size?: number }) {
   );
 }
 
-function UserIcon({ size = 20 }: { size?: number }) {
+function UserIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
-      <circle cx="10" cy="6.3" r="3.3" stroke="currentColor" strokeWidth="2.1" />
-      <path d="M3.5 17c.8-3.6 3.6-5.6 6.5-5.6s5.7 2 6.5 5.6" stroke="currentColor" strokeWidth="2.1" strokeLinecap="round" />
+      <circle cx="10" cy="6.3" r="3.3" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M3.5 17c.8-3.6 3.6-5.6 6.5-5.6s5.7 2 6.5 5.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
     </svg>
   );
 }
