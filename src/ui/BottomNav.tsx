@@ -1,6 +1,18 @@
 import type { Screen } from '../types';
 import { ink, INK } from './tokens';
 
+function PaletteIcon({ size = 22 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <rect x="2" y="3" width="16" height="14" rx="4" stroke="currentColor" strokeWidth="1.4" />
+      <circle cx="6.5" cy="8" r="1.3" fill="currentColor" />
+      <circle cx="10.7" cy="6.8" r="1.3" fill="currentColor" />
+      <circle cx="14.2" cy="9.3" r="1.3" fill="currentColor" />
+      <circle cx="8" cy="12.5" r="1.3" fill="currentColor" />
+    </svg>
+  );
+}
+
 export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen) => void }) {
   const pillBg = (k: Screen) => (screen === k ? INK : 'transparent');
   const pillColor = (k: Screen) => (screen === k ? INK : ink(0.45));
@@ -62,9 +74,8 @@ export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen
             transition: 'background .2s ease',
           }}
         >
-          <span style={{ position: 'relative', width: 20, height: 20, display: 'block' }}>
-            <span style={{ position: 'absolute', top: 9, left: 0, width: 20, height: 2, borderRadius: 1, background: centerFg }} />
-            <span style={{ position: 'absolute', left: 9, top: 0, width: 2, height: 20, borderRadius: 1, background: centerFg }} />
+          <span style={{ color: centerFg, display: 'block' }}>
+            <PaletteIcon />
           </span>
         </div>
       </div>
