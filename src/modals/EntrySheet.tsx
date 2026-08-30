@@ -14,21 +14,19 @@ export function EntrySheet({ state, actions }: { state: AppState; actions: AppAc
       <div style={{ ...sheetWrap, zIndex: 23, padding: '20px 22px 24px' }}>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <div style={{ width: 46, height: 46, borderRadius: 11, flex: 'none', boxShadow: `inset 0 0 0 1px ${ink(0.14)}`, background: state.entryHex }} />
-          <div>
+          <div style={{ flex: 1, minWidth: 0 }}>
             <div style={{ fontSize: 19 }}>Edit entry</div>
             <div style={{ fontSize: 11, color: ink(0.5), letterSpacing: '.04em' }}>{state.entryHex} · {familyOf(state.entryHex)}</div>
           </div>
+          <button onClick={() => actions.patch((s) => ({ entryFav: !s.entryFav }))} title="Mark as favorite" style={favToggleButton(fav)}>{fav.glyph}</button>
         </div>
         <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'stretch' }}>
-            <input
-              value={state.entryNote}
-              onChange={(e) => actions.patch({ entryNote: e.target.value })}
-              placeholder="Project or where it was used"
-              style={{ ...inputStyle, flex: 1, minWidth: 0 }}
-            />
-            <button onClick={() => actions.patch((s) => ({ entryFav: !s.entryFav }))} title="Mark as favorite" style={favToggleButton(fav)}>{fav.glyph}</button>
-          </div>
+          <input
+            value={state.entryNote}
+            onChange={(e) => actions.patch({ entryNote: e.target.value })}
+            placeholder="Project or where it was used"
+            style={inputStyle}
+          />
           <input type="date" value={state.entryDate} onChange={(e) => actions.patch({ entryDate: e.target.value })} style={{ ...inputStyle, fontSize: 12.5 }} />
         </div>
         <button onClick={() => actions.saveEntry()} style={{ ...primaryButton, marginTop: 14 }}>Save changes</button>
