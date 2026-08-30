@@ -61,7 +61,6 @@ export type AppState = {
   addUsageHex: string | null;
   addUsageNote: string;
   addUsageDate: string;
-  addUsageFav: boolean;
 
   gridFilter: GridFilter;
   favSheetOpen: boolean;

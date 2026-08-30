@@ -129,7 +129,6 @@ export function useDerived(state: AppState) {
       fav: starStyle(state.fav),
       batchFav: starStyle(state.batchFav),
       entryFav: starStyle(state.entryFav),
-      addUsageFav: starStyle(state.addUsageFav),
     } as const;
   }, [state]);
 }

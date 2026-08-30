@@ -59,7 +59,7 @@ const initialState: AppState = {
 
   detailHex: null,
 
-  addUsageHex: null, addUsageNote: '', addUsageDate: todayISO(), addUsageFav: false,
+  addUsageHex: null, addUsageNote: '', addUsageDate: todayISO(),
 
   gridFilter: 'newest', favSheetOpen: false,
 
@@ -160,7 +160,7 @@ export function useAppState() {
   }, []);
 
   const openAddUsage = useCallback((hex: string) => {
-    patch({ addUsageHex: hex.toUpperCase(), addUsageNote: '', addUsageDate: todayISO(), addUsageFav: false });
+    patch({ addUsageHex: hex.toUpperCase(), addUsageNote: '', addUsageDate: todayISO() });
   }, [patch]);
 
   const saveAddUsage = useCallback(() => {
@@ -168,7 +168,7 @@ export function useAppState() {
       if (!st.account || !st.addUsageHex) return st;
       const entry: LogEntry = {
         id: genId(), hex: st.addUsageHex,
-        note: st.addUsageNote.trim() || 'No note', date: st.addUsageDate, fav: st.addUsageFav,
+        note: st.addUsageNote.trim() || 'No note', date: st.addUsageDate,
       };
       return { ...st, account: { ...st.account, log: [entry, ...st.account.log] }, addUsageHex: null };
     });
