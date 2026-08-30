@@ -61,7 +61,7 @@ const initialState: AppState = {
 
   addUsageHex: null, addUsageNote: '', addUsageDate: todayISO(), addUsageFav: false,
 
-  gridFilter: 'most', favSheetOpen: false,
+  gridFilter: 'newest', favSheetOpen: false,
 
   extractOpen: false, extractNew: [], extractDupes: [], extractPicked: {}, batchNote: '', batchFav: false,
 };

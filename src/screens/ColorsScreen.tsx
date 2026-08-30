@@ -177,6 +177,7 @@ export function ColorsScreen({
           onChange={(e) => actions.patch({ gridFilter: e.target.value as typeof state.gridFilter })}
           style={{ border: `1px solid ${ink(0.16)}`, borderRadius: 8, padding: '6px 9px', fontSize: 11, color: INK, background: '#FAFAFA', cursor: 'pointer', flex: 'none' }}
         >
+          <option value="newest">Newly added</option>
           <option value="most">Most used</option>
           <option value="least">Least used</option>
         </select>

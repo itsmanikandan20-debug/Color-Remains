@@ -12,7 +12,7 @@ export type Account = {
 export type Screen = 'colors' | 'balance' | 'profile';
 export type Range = 'lifetime' | 'year';
 export type AuthMode = 'signin' | 'signup';
-export type GridFilter = 'most' | 'least';
+export type GridFilter = 'newest' | 'most' | 'least';
 
 export type Flash = { hex: string; label: string } | null;
 
