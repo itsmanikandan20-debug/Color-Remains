@@ -40,10 +40,14 @@ export function useDerived(state: AppState) {
 
     const sheetName = state.familyOpen;
     const sheetItems = sheetName
-      ? filtered
-          .filter((c) => familyOf(c.hex) === sheetName)
-          .sort((a, b) => (a.date < b.date ? 1 : -1))
-          .map((c) => ({ hex: c.hex.toUpperCase(), note: c.note, dateLabel: dateLabel(c.date), fav: !!c.fav, raw: c }))
+      ? groupByColor(filtered.filter((c) => familyOf(c.hex) === sheetName)).map((g) => ({
+          hex: g.hex,
+          note: g.entries[0].note,
+          dateLabel: dateLabel(g.entries[0].date),
+          fav: g.fav,
+          count: g.count,
+          raw: g.entries[0],
+        }))
       : [];
 
     // groupByColor already returns colors in newest-added order (log entries

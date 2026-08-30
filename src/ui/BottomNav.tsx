@@ -13,6 +13,15 @@ function PaletteIcon({ size = 22 }: { size?: number }) {
   );
 }
 
+function UserIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <circle cx="10" cy="6.3" r="3.3" stroke="currentColor" strokeWidth="1.4" />
+      <path d="M3.5 17c.8-3.6 3.6-5.6 6.5-5.6s5.7 2 6.5 5.6" stroke="currentColor" strokeWidth="1.4" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen) => void }) {
   const pillBg = (k: Screen) => (screen === k ? INK : 'transparent');
   const pillColor = (k: Screen) => (screen === k ? INK : ink(0.45));
@@ -58,7 +67,7 @@ export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen
           style={{ flex: 1, cursor: 'pointer', height: 52, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5, fontSize: 10.5, fontWeight: 500, color: pillColor('profile'), transition: 'color .2s ease' }}
         >
           <span style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s ease', background: pillBg('profile'), color: iconColor('profile') }}>
-            <span style={{ display: 'block', width: 10, height: 10, borderRadius: '50%', marginTop: -4, boxShadow: 'inset 0 0 0 1.5px currentColor, 0 7px 0 -3px currentColor' }} />
+            <UserIcon />
           </span>
           <span style={{ whiteSpace: 'nowrap', opacity: labelOpacity('profile') }}>Profile</span>
         </div>

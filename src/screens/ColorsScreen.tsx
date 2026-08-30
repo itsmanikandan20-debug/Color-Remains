@@ -136,7 +136,6 @@ export function ColorsScreen({
           <div style={{ marginTop: 13, border: `1px solid ${ink(0.12)}`, borderRadius: 12, padding: 9, background: '#FAFAFA' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: ink(0.55) }}>
-                <EyedropperIcon />
                 <span style={{ fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: ink(0.42) }}>Tap image to pick a color</span>
               </div>
               <button onClick={() => actions.patch({ imageSrc: null, extractOpen: false })} style={{ border: 'none', background: 'none', fontSize: 9.5, color: ink(0.4), cursor: 'pointer', padding: '2px 4px' }}>Remove</button>

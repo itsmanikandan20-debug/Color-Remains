@@ -55,11 +55,11 @@ export function DetailSheet({ state, derived, actions }: {
         <div style={{ display: 'flex', gap: 8, marginTop: 16 }}>
           <button
             onClick={() => actions.openAddUsage(hex)}
-            style={{ flex: 1, padding: '12px 0', border: 'none', borderRadius: 11, background: INK, color: '#FFFFFF', fontSize: 13, fontWeight: 500, cursor: 'pointer' }}
+            style={{ flex: 1, padding: '12px 0', border: `1px solid ${ink(0.18)}`, borderRadius: 11, background: '#FAFAFA', color: INK, fontSize: 13, fontWeight: 500, cursor: 'pointer' }}
           >
             Add Usage
           </button>
-          <button onClick={close} style={{ flex: 1, padding: '12px 0', border: `1px solid ${ink(0.18)}`, borderRadius: 11, background: '#FAFAFA', fontSize: 13, color: INK, cursor: 'pointer' }}>Close</button>
+          <button onClick={close} style={{ flex: 1, padding: '12px 0', border: 'none', borderRadius: 11, background: INK, fontSize: 13, color: '#FFFFFF', cursor: 'pointer' }}>Close</button>
         </div>
       </div>
     </>

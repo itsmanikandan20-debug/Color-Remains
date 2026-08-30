@@ -8,7 +8,7 @@ export function FamilySheet({ state, derived, actions }: {
   derived: Extract<Derived, { acc: NonNullable<Derived['acc']> }>;
   actions: AppActions;
 }) {
-  const { sheetName, sheetItems, sheetEmpty, sheetEmptyNote, countByHex } = derived;
+  const { sheetName, sheetItems, sheetEmpty, sheetEmptyNote } = derived;
   if (!sheetName) return null;
   const close = () => actions.patch({ familyOpen: null });
 
@@ -25,7 +25,7 @@ export function FamilySheet({ state, derived, actions }: {
           <div>
             <div style={{ fontSize: 24 }}>{sheetName}</div>
             <div style={{ fontSize: 10, color: ink(0.45), marginTop: 3 }}>
-              {sheetItems.length ? sheetItems.length + ' logged · ' + (state.range === 'year' ? 'this year' : 'lifetime') : 'no entries'}
+              {sheetItems.length ? sheetItems.length + (sheetItems.length === 1 ? ' color · ' : ' colors · ') + (state.range === 'year' ? 'this year' : 'lifetime') : 'no entries'}
             </div>
           </div>
           <button onClick={close} style={{ border: `1px solid ${ink(0.16)}`, background: '#FAFAFA', borderRadius: 8, padding: '6px 11px', fontSize: 11.5, cursor: 'pointer', color: INK }}>Close</button>
@@ -40,9 +40,9 @@ export function FamilySheet({ state, derived, actions }: {
           {sheetItems.map((i) => (
             <div key={i.raw.id} onClick={() => actions.openEntry(i.raw)} style={{ display: 'flex', gap: 13, alignItems: 'center', paddingBottom: 13, borderBottom: `1px solid ${ink(0.07)}`, cursor: 'pointer' }}>
               <div style={{ position: 'relative', width: 52, height: 52, borderRadius: 11, flex: 'none', boxShadow: `inset 0 0 0 1px ${ink(0.13)}`, background: i.hex }}>
-                {countByHex[i.hex] > 1 && (
+                {i.count > 1 && (
                   <div style={{ position: 'absolute', bottom: 3, right: 3, minWidth: 15, height: 15, padding: '0 3px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    ×{countByHex[i.hex]}
+                    ×{i.count}
                   </div>
                 )}
               </div>
