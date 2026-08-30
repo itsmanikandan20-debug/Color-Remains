@@ -10,7 +10,7 @@ export function BalanceScreen({
   derived: Extract<Derived, { acc: NonNullable<Derived['acc']> }>;
   actions: AppActions;
 }) {
-  const { filtered, stats, familyRows, coverageNote, pips } = derived;
+  const { totalUnique, stats, familyRows, coverageNote, pips } = derived;
 
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '20px 22px 110px' }}>
@@ -30,7 +30,7 @@ export function BalanceScreen({
       </div>
 
       <div style={{ display: 'flex', alignItems: 'flex-end', gap: 14, paddingBottom: 18, borderBottom: `1px solid ${ink(0.09)}` }}>
-        <div style={{ fontSize: 64, lineHeight: 0.85, letterSpacing: '-.03em' }}>{filtered.length}</div>
+        <div style={{ fontSize: 64, lineHeight: 0.85, letterSpacing: '-.03em' }}>{totalUnique}</div>
         <div style={{ paddingBottom: 5 }}>
           <div style={{ fontSize: 12.5, lineHeight: 1.4, color: ink(0.6) }}>unique colors<br />marked as used</div>
         </div>

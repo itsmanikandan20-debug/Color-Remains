@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import type { AppState } from '../types';
-import { FAMILIES, familyOf, hsvToHex, computeStats, dateLabel } from '../lib/color';
+import { FAMILIES, familyOf, hsvToHex, computeStats, dateLabel, uniqueColorCount } from '../lib/color';
+import { groupByColor } from '../lib/colorGroups';
 import { starStyle } from '../ui/tokens';
 
 const CURRENT_YEAR = String(new Date().getFullYear());
@@ -22,7 +23,7 @@ export function useDerived(state: AppState) {
     const filtered = acc.log.filter((c) => state.range === 'lifetime' || String(c.date).slice(0, 4) === CURRENT_YEAR);
     const stats = computeStats(filtered);
     const lifetimeStats = computeStats(acc.log);
-    const total = filtered.length || 1;
+    const total = Math.max(1, uniqueColorCount(filtered));
 
     const familyRows = FAMILIES.map((f) => {
       const n = stats.counts[f.name];
@@ -46,14 +47,19 @@ export function useDerived(state: AppState) {
       : [];
 
     const showFavs = state.gridFilter === 'favs';
-    const favs = acc.log.filter((c) => c.fav).sort((a, b) => (a.date < b.date ? 1 : -1));
-    const gridColors = showFavs ? favs : acc.log;
+    const allGroups = groupByColor(acc.log);
+    const colorGroups = showFavs ? allGroups.filter((g) => g.fav) : allGroups;
 
     const selectedCount = state.extractNew.filter((x) => state.extractPicked[x]).length;
     const allSelected = state.extractNew.length > 0 && selectedCount === state.extractNew.length;
 
-    const detailEntry = state.detailHex ? acc.log.find((c) => c.hex.toUpperCase() === state.detailHex) || null : null;
-    const detailFav = !!(detailEntry && detailEntry.fav);
+    const detailEntries = state.detailHex
+      ? acc.log.filter((c) => c.hex.toUpperCase() === state.detailHex).sort((a, b) => (a.date < b.date ? 1 : -1))
+      : [];
+    const detailFamily = state.detailHex ? familyOf(state.detailHex) : '';
+    const detailFav = detailEntries.some((e) => e.fav);
+
+    const addUsageFamily = state.addUsageHex ? familyOf(state.addUsageHex) : '';
 
     const coverageNote =
       stats.touched === FAMILIES.length
@@ -69,7 +75,7 @@ export function useDerived(state: AppState) {
       ring: stats.counts[f.name] > 0 ? 'none' : 'inset 0 0 0 1px rgba(28,27,26,.2)',
     }));
 
-    const overallPct = (acc.log.length / 16777216 * 100).toFixed(5).replace(/0+$/, '').replace(/\.$/, '') + '%';
+    const overallPct = (uniqueColorCount(acc.log) / 16777216 * 100).toFixed(5).replace(/0+$/, '').replace(/\.$/, '') + '%';
 
     const headers: Record<string, [string, string, string]> = {
       colors: ['', 'Colour Remains', ''],
@@ -77,6 +83,7 @@ export function useDerived(state: AppState) {
       profile: ['', 'Profile', 'v1.0'],
     };
 
+    const favs = acc.log.filter((c) => c.fav).sort((a, b) => (a.date < b.date ? 1 : -1));
     const favItems = favs.map((c) => ({
       hex: c.hex.toUpperCase(), note: c.note, dateLabel: dateLabel(c.date), family: familyOf(c.hex), raw: c,
     }));
@@ -87,6 +94,7 @@ export function useDerived(state: AppState) {
       previewFamily,
       existing,
       filtered,
+      totalUnique: uniqueColorCount(filtered),
       stats,
       lifetimeStats,
       familyRows,
@@ -96,16 +104,19 @@ export function useDerived(state: AppState) {
       sheetEmptyNote: (sheetName && EMPTY_NOTES[sheetName]) || 'Nothing logged in this family yet.',
       selectedCount,
       allSelected,
-      detailEntry,
+      detailEntries,
+      detailFamily,
       detailFav,
+      addUsageFamily,
       coverageNote,
       pips,
       overallPct,
+      uniqueColors: uniqueColorCount(acc.log),
       header: headers[state.screen],
 
       showFavs,
-      gridColors,
-      isEmpty: gridColors.length === 0,
+      colorGroups,
+      isEmpty: colorGroups.length === 0,
       emptyTitle: showFavs ? 'No favorites yet' : 'Nothing logged yet',
       emptyNote: showFavs
         ? 'Tap the star when you log a color to keep it here.'
@@ -121,6 +132,7 @@ export function useDerived(state: AppState) {
       fav: starStyle(state.fav),
       batchFav: starStyle(state.batchFav),
       entryFav: starStyle(state.entryFav),
+      addUsageFav: starStyle(state.addUsageFav),
     } as const;
   }, [state]);
 }

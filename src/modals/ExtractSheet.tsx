@@ -74,12 +74,12 @@ export function ExtractSheet({ state, derived, actions }: {
 
           {state.extractDupes.length > 0 && (
             <>
-              <div style={{ fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: ink(0.42), margin: '22px 0 9px' }}>Already logged</div>
+              <div style={{ fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: ink(0.42), margin: '22px 0 9px' }}>Already logged — tap to add a use</div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
                 {state.extractDupes.map((hex) => (
-                  <div key={hex} style={{ opacity: 0.45 }}>
-                    <div style={{ aspectRatio: '1', borderRadius: 10, background: hex, boxShadow: `inset 0 0 0 1px ${ink(0.12)}`, filter: 'grayscale(.55)' }} />
-                    <div style={{ fontSize: 8, color: ink(0.45), marginTop: 4, textAlign: 'center' }}>Already logged</div>
+                  <div key={hex} onClick={() => actions.openAddUsage(hex)} style={{ opacity: 0.7, cursor: 'pointer' }}>
+                    <div style={{ aspectRatio: '1', borderRadius: 10, background: hex, boxShadow: `inset 0 0 0 1px ${ink(0.12)}`, filter: 'grayscale(.4)' }} />
+                    <div style={{ fontSize: 8, color: ink(0.45), marginTop: 4, textAlign: 'center' }}>+ Add use</div>
                   </div>
                 ))}
               </div>

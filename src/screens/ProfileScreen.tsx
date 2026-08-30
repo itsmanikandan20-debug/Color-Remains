@@ -9,7 +9,7 @@ export function ProfileScreen({
   derived: Extract<Derived, { acc: NonNullable<Derived['acc']> }>;
   actions: AppActions;
 }) {
-  const { acc, overallPct, lifetimeStats, favCountLabel, favPreview } = derived;
+  const { acc, overallPct, lifetimeStats, favCountLabel, favPreview, uniqueColors } = derived;
 
   return (
     <div style={{ flex: 1, overflowY: 'auto', padding: '22px 22px 110px' }}>
@@ -28,7 +28,7 @@ export function ProfileScreen({
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 1, background: ink(0.1), borderRadius: 12, overflow: 'hidden', marginTop: 20 }}>
         <div style={{ background: '#FFFFFF', padding: '14px 12px' }}>
-          <div style={{ fontSize: 26, lineHeight: 1 }}>{acc.log.length}</div>
+          <div style={{ fontSize: 26, lineHeight: 1 }}>{uniqueColors}</div>
           <div style={{ fontSize: 10.5, color: ink(0.5), marginTop: 3 }}>colors</div>
         </div>
         <div style={{ background: '#FFFFFF', padding: '14px 12px' }}>

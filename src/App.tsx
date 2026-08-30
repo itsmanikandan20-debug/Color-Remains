@@ -13,6 +13,7 @@ import { DetailSheet } from './modals/DetailSheet';
 import { FamilySheet } from './modals/FamilySheet';
 import { FavoritesSheet } from './modals/FavoritesSheet';
 import { ExtractSheet } from './modals/ExtractSheet';
+import { AddUsageSheet } from './modals/AddUsageSheet';
 import { EditProfileSheet } from './modals/EditProfileSheet';
 import { ShareSheet } from './modals/ShareSheet';
 import { PAPER_BG } from './ui/tokens';
@@ -50,7 +51,8 @@ export default function App() {
             <FamilySheet state={state} derived={derived} actions={actions} />
             <FavoritesSheet state={state} derived={derived} actions={actions} />
             <ExtractSheet state={state} derived={derived} actions={actions} />
-            <DetailSheet state={state} actions={actions} />
+            <DetailSheet state={state} derived={derived} actions={actions} />
+            <AddUsageSheet state={state} derived={derived} actions={actions} />
             <EntrySheet state={state} actions={actions} />
             <EditProfileSheet state={state} actions={actions} />
             <ShareSheet state={state} actions={actions} />

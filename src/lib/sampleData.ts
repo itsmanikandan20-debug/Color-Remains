@@ -1,7 +1,8 @@
 import type { LogEntry } from './color';
 
-export const SAMPLE: LogEntry[] = [
+export const SAMPLE: Omit<LogEntry, 'id'>[] = [
   { hex: '#2E5AAC', note: 'Ledger app — primary button', date: '2026-05-14' },
+  { hex: '#2E5AAC', note: 'Onboarding — link color', date: '2026-06-20' },
   { hex: '#1B3A6B', note: 'Ledger app — dark header', date: '2026-05-14' },
   { hex: '#4A7FD1', note: 'Ledger app — chart line', date: '2026-04-02' },
   { hex: '#6FA8DC', note: 'Onboarding illustration fill', date: '2025-11-19' },

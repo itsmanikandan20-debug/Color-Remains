@@ -50,12 +50,18 @@ export type AppState = {
   shareOpen: boolean;
   shareUrl: string | null;
 
+  entryId: string | null;
   entryHex: string | null;
   entryNote: string;
   entryDate: string;
   entryFav: boolean;
 
   detailHex: string | null;
+
+  addUsageHex: string | null;
+  addUsageNote: string;
+  addUsageDate: string;
+  addUsageFav: boolean;
 
   gridFilter: GridFilter;
   favSheetOpen: boolean;

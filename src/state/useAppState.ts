@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
 import type { Account, AppState } from '../types';
-import { hexToRgb, rgbToHsv, hsvToHex, todayISO, type LogEntry } from '../lib/color';
+import { hexToRgb, rgbToHsv, hsvToHex, todayISO, genId, type LogEntry } from '../lib/color';
 import { SAMPLE } from '../lib/sampleData';
 import { extractColors, sampleImageAt, readImageFile } from '../lib/extract';
 
@@ -27,7 +27,7 @@ function createAccount(email: string): Account {
     joined: isDemo ? '2023-11-01' : todayISO(),
     // Every fresh account starts with sample data so the balance dashboard
     // reads real right away — this is a click-through prototype, not a blank app.
-    log: SAMPLE.map((c) => ({ ...c })),
+    log: SAMPLE.map((c) => ({ ...c, id: genId() })),
   };
 }
 
@@ -55,9 +55,11 @@ const initialState: AppState = {
 
   shareOpen: false, shareUrl: null,
 
-  entryHex: null, entryNote: '', entryDate: '', entryFav: false,
+  entryId: null, entryHex: null, entryNote: '', entryDate: '', entryFav: false,
 
   detailHex: null,
+
+  addUsageHex: null, addUsageNote: '', addUsageDate: todayISO(), addUsageFav: false,
 
   gridFilter: 'all', favSheetOpen: false,
 
@@ -109,46 +111,60 @@ export function useAppState() {
     });
   }, []);
 
+  // Only reachable for a color with no existing entry (the picker shows
+  // "Already used" and routes to Add Usage instead once one exists), but this
+  // never dedupes by hex — every save is a new entry, preserving history.
   const save = useCallback(() => {
     setState((st) => {
       if (!st.account) return st;
       const hex = st.exact || hsvToHex(st.h, st.s, st.v);
-      const log: LogEntry[] = [
-        { hex, note: st.note || 'No note', date: st.date, fav: st.fav },
-        ...st.account.log.filter((c) => c.hex.toUpperCase() !== hex.toUpperCase()),
-      ];
-      return { ...st, account: { ...st.account, log }, noteOpen: false, note: '', fav: false };
+      const entry: LogEntry = { id: genId(), hex, note: st.note || 'No note', date: st.date, fav: st.fav };
+      return { ...st, account: { ...st.account, log: [entry, ...st.account.log] }, noteOpen: false, note: '', fav: false };
     });
     toast('Marked as used', state.exact || hsvToHex(state.h, state.s, state.v));
-  }, [patch, toast, state.exact, state.h, state.s, state.v]);
+  }, [toast, state.exact, state.h, state.s, state.v]);
 
-  const openEntry = useCallback((c: { hex: string; note: string; date: string; fav?: boolean }) => {
-    patch({ entryHex: c.hex.toUpperCase(), entryNote: c.note, entryDate: c.date, entryFav: !!c.fav });
+  const openEntry = useCallback((c: LogEntry) => {
+    patch({ entryId: c.id, entryHex: c.hex.toUpperCase(), entryNote: c.note, entryDate: c.date, entryFav: !!c.fav });
   }, [patch]);
 
   const saveEntry = useCallback(() => {
     setState((st) => {
-      if (!st.account || !st.entryHex) return st;
-      const key = st.entryHex.toUpperCase();
+      if (!st.account || !st.entryId) return st;
       const log = st.account.log.map((c) =>
-        c.hex.toUpperCase() === key
-          ? { hex: c.hex, note: st.entryNote || 'No note', date: st.entryDate || c.date, fav: st.entryFav }
+        c.id === st.entryId
+          ? { ...c, note: st.entryNote || 'No note', date: st.entryDate || c.date, fav: st.entryFav }
           : c,
       );
-      return { ...st, account: { ...st.account, log }, entryHex: null, detailHex: null };
+      return { ...st, account: { ...st.account, log }, entryId: null, entryHex: null, detailHex: null };
     });
     toast(state.entryFav ? 'Saved to favorites' : 'Entry updated', state.entryHex || undefined);
-  }, [toast, state.entryHex, state.entryFav]);
+  }, [toast, state.entryFav, state.entryHex]);
 
   const removeEntry = useCallback(() => {
     setState((st) => {
-      if (!st.account || !st.entryHex) return st;
-      const key = st.entryHex.toUpperCase();
-      const log = st.account.log.filter((c) => c.hex.toUpperCase() !== key);
-      return { ...st, account: { ...st.account, log }, entryHex: null, detailHex: null };
+      if (!st.account || !st.entryId) return st;
+      const log = st.account.log.filter((c) => c.id !== st.entryId);
+      return { ...st, account: { ...st.account, log }, entryId: null, entryHex: null, detailHex: null };
     });
     toast('Removed from log', '#8A8785');
   }, [toast]);
+
+  const openAddUsage = useCallback((hex: string) => {
+    patch({ addUsageHex: hex.toUpperCase(), addUsageNote: '', addUsageDate: todayISO(), addUsageFav: false });
+  }, [patch]);
+
+  const saveAddUsage = useCallback(() => {
+    setState((st) => {
+      if (!st.account || !st.addUsageHex) return st;
+      const entry: LogEntry = {
+        id: genId(), hex: st.addUsageHex,
+        note: st.addUsageNote.trim() || 'No note', date: st.addUsageDate, fav: st.addUsageFav,
+      };
+      return { ...st, account: { ...st.account, log: [entry, ...st.account.log] }, addUsageHex: null };
+    });
+    toast('Usage added', state.addUsageHex || undefined);
+  }, [toast, state.addUsageHex]);
 
   const onFile = useCallback(async (file: File) => {
     const src = await readImageFile(file);
@@ -191,7 +207,7 @@ export function useAppState() {
       count = chosen.length;
       firstHex = chosen[0];
       const note = st.batchNote.trim() || 'No note';
-      const entries: LogEntry[] = chosen.map((hex) => ({ hex, note, date: st.date, fav: st.batchFav }));
+      const entries: LogEntry[] = chosen.map((hex) => ({ id: genId(), hex, note, date: st.date, fav: st.batchFav }));
       return {
         ...st,
         account: { ...st.account, log: [...entries, ...st.account.log] },
@@ -229,10 +245,10 @@ export function useAppState() {
 
   const actions = useMemo(() => ({
     patch, updateAccount, toast, signIn, setFromHex, setFromHsv, save,
-    openEntry, saveEntry, removeEntry, onFile, sampleFromImage, extract,
+    openEntry, saveEntry, removeEntry, openAddUsage, saveAddUsage, onFile, sampleFromImage, extract,
     addBatch, onAvatarFile, saveProfile, logout,
   }), [patch, updateAccount, toast, signIn, setFromHex, setFromHsv, save,
-    openEntry, saveEntry, removeEntry, onFile, sampleFromImage, extract,
+    openEntry, saveEntry, removeEntry, openAddUsage, saveAddUsage, onFile, sampleFromImage, extract,
     addBatch, onAvatarFile, saveProfile, logout]);
 
   return { state, actions, imgRef };

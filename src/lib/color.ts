@@ -101,7 +101,27 @@ export function todayISO(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-export type LogEntry = { hex: string; note: string; date: string; fav?: boolean };
+export type LogEntry = { id: string; hex: string; note: string; date: string; fav?: boolean };
+
+export function genId(): string {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
+}
+
+// One color can now have many usage entries (see color-group.ts). Stats are
+// always about the unique colors touched, not how many times each was used.
+export function uniqueEntries(log: LogEntry[]): LogEntry[] {
+  const seen = new Set<string>();
+  return log.filter((c) => {
+    const k = c.hex.toUpperCase();
+    if (seen.has(k)) return false;
+    seen.add(k);
+    return true;
+  });
+}
+
+export function uniqueColorCount(log: LogEntry[]): number {
+  return new Set(log.map((c) => c.hex.toUpperCase())).size;
+}
 
 export type Stats = {
   counts: Record<string, number>;
@@ -113,7 +133,7 @@ export type Stats = {
 export function computeStats(log: LogEntry[]): Stats {
   const counts: Record<string, number> = {};
   FAMILIES.forEach((f) => { counts[f.name] = 0; });
-  log.forEach((c) => { counts[familyOf(c.hex)] += 1; });
+  uniqueEntries(log).forEach((c) => { counts[familyOf(c.hex)] += 1; });
   const touched = FAMILIES.filter((f) => counts[f.name] > 0).length;
   let leans = FAMILIES[0].name;
   FAMILIES.forEach((f) => { if (counts[f.name] > counts[leans]) leans = f.name; });

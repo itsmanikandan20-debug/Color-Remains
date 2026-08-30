@@ -1,7 +1,8 @@
-import { FAM_HEX, computeStats, monthYear, type LogEntry } from './color';
+import { FAM_HEX, computeStats, monthYear, uniqueColorCount, type LogEntry } from './color';
 
 export function buildShareCard(name: string, joined: string, log: LogEntry[]): string {
   const s = computeStats(log);
+  const colorCount = uniqueColorCount(log);
   const W = 1080;
   const H = 660;
   const cv = document.createElement('canvas');
@@ -24,9 +25,9 @@ export function buildShareCard(name: string, joined: string, log: LogEntry[]): s
   c.font = '26px Inter, sans-serif';
   c.fillText('Designer since ' + monthYear(joined), 110, 296);
 
-  const overall = (log.length / 16777216 * 100).toFixed(5).replace(/0+$/, '') + '%';
+  const overall = (colorCount / 16777216 * 100).toFixed(5).replace(/0+$/, '') + '%';
   const cols: [string, string][] = [
-    [String(log.length), 'colors logged'],
+    [String(colorCount), 'colors logged'],
     [overall, 'overall'],
     [s.leans, 'leans'],
   ];

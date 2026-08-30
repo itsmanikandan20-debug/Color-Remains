@@ -22,7 +22,7 @@ export function ColorsScreen({
   actions: AppActions;
   imgRef: RefObject<HTMLImageElement | null>;
 }) {
-  const { previewHex, previewFamily, existing, gridColors, isEmpty, emptyTitle, emptyNote, allTab, favTab } = derived;
+  const { previewHex, previewFamily, existing, colorGroups, isEmpty, emptyTitle, emptyNote, allTab, favTab } = derived;
 
   const [pickPoint, setPickPoint] = useState<{ xPct: number; yPct: number } | null>(null);
   useEffect(() => { setPickPoint(null); }, [state.imageSrc]);
@@ -192,14 +192,19 @@ export function ColorsScreen({
           </div>
         )}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
-          {gridColors.map((c) => (
-            <div key={c.hex.toUpperCase()} onClick={() => actions.patch({ detailHex: c.hex.toUpperCase() })} style={{ cursor: 'pointer' }}>
-              <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 10, boxShadow: `inset 0 0 0 1px ${ink(0.12)}`, background: c.hex }}>
-                {c.fav && (
+          {colorGroups.map((g) => (
+            <div key={g.hex} onClick={() => actions.patch({ detailHex: g.hex })} style={{ cursor: 'pointer' }}>
+              <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 10, boxShadow: `inset 0 0 0 1px ${ink(0.12)}`, background: g.hex }}>
+                {g.fav && (
                   <div style={{ position: 'absolute', top: 3, right: 4, fontSize: 11, lineHeight: 1, color: '#FFFFFF', textShadow: '0 1px 2px rgba(28,27,26,.55)' }}>★</div>
                 )}
+                {g.count > 1 && (
+                  <div style={{ position: 'absolute', bottom: 3, right: 3, minWidth: 15, height: 15, padding: '0 3px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    ×{g.count}
+                  </div>
+                )}
               </div>
-              <div style={{ fontSize: 8.5, color: ink(0.45), marginTop: 4, textAlign: 'center' }}>{c.hex.toUpperCase().replace('#', '')}</div>
+              <div style={{ fontSize: 8.5, color: ink(0.45), marginTop: 4, textAlign: 'center' }}>{g.hex.replace('#', '')}</div>
             </div>
           ))}
         </div>

@@ -4,8 +4,8 @@ import { familyOf } from '../lib/color';
 import { ink, RED, inputStyle, primaryButton, sheetWrap, scrim, starStyle, favToggleButton } from '../ui/tokens';
 
 export function EntrySheet({ state, actions }: { state: AppState; actions: AppActions }) {
-  if (!state.entryHex) return null;
-  const close = () => actions.patch({ entryHex: null });
+  if (!state.entryId || !state.entryHex) return null;
+  const close = () => actions.patch({ entryId: null, entryHex: null });
   const fav = starStyle(state.entryFav);
 
   return (
