@@ -47,8 +47,7 @@ export function useDerived(state: AppState) {
       : [];
 
     const colorGroups = groupByColor(acc.log);
-    if (state.gridFilter === 'most') colorGroups.sort((a, b) => b.count - a.count);
-    else if (state.gridFilter === 'least') colorGroups.sort((a, b) => a.count - b.count);
+    colorGroups.sort((a, b) => (state.gridFilter === 'most' ? b.count - a.count : a.count - b.count));
 
     const selectedCount = state.extractNew.filter((x) => state.extractPicked[x]).length;
     const allSelected = state.extractNew.length > 0 && selectedCount === state.extractNew.length;
