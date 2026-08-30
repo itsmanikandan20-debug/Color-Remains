@@ -1,0 +1,112 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #F0EFEC;
+  -webkit-font-smoothing: antialiased;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Desktop/tablet: a centered phone mockup, matching the design's own preview canvas. */
+.cb-shell {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 28px 16px 40px;
+}
+.cb-card {
+  width: 390px;
+  height: min(844px, calc(100vh - 68px));
+  border-radius: 26px;
+  box-shadow: 0 18px 50px rgba(28,27,26,.18), 0 0 0 1px rgba(28,27,26,.07);
+}
+
+/* Real phones: fill the actual screen edge-to-edge, like an installed app. */
+@media (max-width: 480px) {
+  .cb-shell {
+    padding: 0;
+    align-items: stretch;
+  }
+  .cb-card {
+    width: 100%;
+    height: 100vh;
+    height: 100dvh;
+    border-radius: 0;
+    box-shadow: none;
+  }
+}
+
+a {
+  color: #1C1B1A;
+}
+a:hover {
+  color: #6B4A32;
+}
+
+input[type=range] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+}
+input[type=range]::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: -7px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid rgba(28,27,26,.35);
+  box-shadow: 0 1px 3px rgba(28,27,26,.25);
+}
+input[type=range]::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: transparent;
+}
+input[type=range]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid rgba(28,27,26,.35);
+  box-shadow: 0 1px 3px rgba(28,27,26,.25);
+}
+
+button {
+  font: inherit;
+}
+
+textarea {
+  font: inherit;
+}
+
+@keyframes cbFade {
+  0% { opacity: 0; transform: translateY(6px); }
+  12% { opacity: 1; transform: none; }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes cbTick {
+  0% { transform: scale(.6); opacity: 0; }
+  60% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); opacity: 1; }
+}
+@keyframes cbUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+@keyframes cbIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
