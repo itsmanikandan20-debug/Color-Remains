@@ -3,7 +3,7 @@ import type { AppState } from '../types';
 import type { AppActions } from '../state/useAppState';
 import type { Derived } from '../state/useDerived';
 import { hsvToHex } from '../lib/color';
-import { ink, INK, starStyle } from '../ui/tokens';
+import { ink, INK } from '../ui/tokens';
 
 function EyedropperIcon({ size = 15 }: { size?: number }) {
   return (
@@ -23,7 +23,6 @@ export function ColorsScreen({
   imgRef: RefObject<HTMLImageElement | null>;
 }) {
   const { previewHex, previewFamily, existing, colorGroups, isEmpty, emptyTitle, emptyNote } = derived;
-  const existingFav = starStyle(!!existing?.fav);
 
   const [pickPoint, setPickPoint] = useState<{ xPct: number; yPct: number } | null>(null);
   useEffect(() => { setPickPoint(null); }, [state.imageSrc]);
@@ -124,13 +123,6 @@ export function ColorsScreen({
             <div onClick={() => actions.openEntry(existing)} style={{ flex: 1, minWidth: 0, cursor: 'pointer' }}>
               <span style={{ fontSize: 12, lineHeight: 1.4, color: ink(0.6) }}>{existing.note} · {new Date(existing.date).toLocaleDateString()}</span>
             </div>
-            <button
-              onClick={() => actions.toggleFav(existing.id)}
-              title="Favorite"
-              style={{ flex: 'none', width: 28, height: 28, borderRadius: 8, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, lineHeight: 1, border: existingFav.border, background: existingFav.bg, color: existingFav.color }}
-            >
-              {existingFav.glyph}
-            </button>
             <button
               onClick={() => actions.openAddUsage(existing.hex)}
               style={{ flex: 'none', padding: '7px 11px', borderRadius: 8, border: `1px solid ${ink(0.18)}`, background: '#FFFFFF', fontSize: 11.5, color: INK, cursor: 'pointer', whiteSpace: 'nowrap' }}
