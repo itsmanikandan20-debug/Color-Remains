@@ -155,11 +155,12 @@ export function useAppState() {
     patch({ imageSrc: src });
   }, [patch]);
 
-  const sampleFromImage = useCallback((clientX: number, clientY: number) => {
+  const sampleFromImage = useCallback((clientX: number, clientY: number): string | null => {
     const img = imgRef.current;
-    if (!img) return;
+    if (!img) return null;
     const hex = sampleImageAt(img, clientX, clientY);
     if (hex) setFromHex(hex);
+    return hex;
   }, [setFromHex]);
 
   const extract = useCallback(() => {

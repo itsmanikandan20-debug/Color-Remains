@@ -1,9 +1,18 @@
-import type { RefObject } from 'react';
+import { useEffect, useState, type MouseEvent, type RefObject } from 'react';
 import type { AppState } from '../types';
 import type { AppActions } from '../state/useAppState';
 import type { Derived } from '../state/useDerived';
 import { hsvToHex } from '../lib/color';
 import { ink, INK } from '../ui/tokens';
+
+function EyedropperIcon({ size = 15 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <path d="M13.5 2.5L17.5 6.5L14.8 9.2L10.8 5.2L13.5 2.5Z" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+      <path d="M11.5 7.5L3.5 15.5L2.5 18.5L5.5 17.5L13.5 9.5" stroke="currentColor" strokeWidth="1.4" strokeLinejoin="round" />
+    </svg>
+  );
+}
 
 export function ColorsScreen({
   state, derived, actions, imgRef,
@@ -14,6 +23,20 @@ export function ColorsScreen({
   imgRef: RefObject<HTMLImageElement | null>;
 }) {
   const { previewHex, previewFamily, existing, gridColors, isEmpty, emptyTitle, emptyNote, allTab, favTab } = derived;
+
+  const [pickPoint, setPickPoint] = useState<{ xPct: number; yPct: number } | null>(null);
+  useEffect(() => { setPickPoint(null); }, [state.imageSrc]);
+
+  const handleSample = (e: MouseEvent<HTMLImageElement>) => {
+    const r = e.currentTarget.getBoundingClientRect();
+    const hex = actions.sampleFromImage(e.clientX, e.clientY);
+    if (hex) {
+      setPickPoint({
+        xPct: ((e.clientX - r.left) / r.width) * 100,
+        yPct: ((e.clientY - r.top) / r.height) * 100,
+      });
+    }
+  };
 
   const satTrack = `linear-gradient(90deg,${hsvToHex(state.h, 0, state.v)},${hsvToHex(state.h, 100, state.v)})`;
   const valTrack = `linear-gradient(90deg,#1C1B1A,${hsvToHex(state.h, state.s, 100)})`;
@@ -108,16 +131,33 @@ export function ColorsScreen({
         {state.imageSrc && (
           <div style={{ marginTop: 13, border: `1px solid ${ink(0.12)}`, borderRadius: 12, padding: 9, background: '#FAFAFA' }}>
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 7 }}>
-              <div style={{ fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: ink(0.42) }}>Tap to sample</div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, color: ink(0.55) }}>
+                <EyedropperIcon />
+                <span style={{ fontSize: 9.5, letterSpacing: '.14em', textTransform: 'uppercase', color: ink(0.42) }}>Tap image to pick a color</span>
+              </div>
               <button onClick={() => actions.patch({ imageSrc: null, extractOpen: false })} style={{ border: 'none', background: 'none', fontSize: 9.5, color: ink(0.4), cursor: 'pointer', padding: '2px 4px' }}>Remove</button>
             </div>
-            <div style={{ width: '100%', height: 150, borderRadius: 6, overflow: 'hidden' }}>
+            <div style={{ position: 'relative', width: '100%', height: 190, borderRadius: 6, overflow: 'hidden', background: '#1C1B1A' }}>
               <img
                 src={state.imageSrc}
                 ref={imgRef}
-                onClick={(e) => actions.sampleFromImage(e.clientX, e.clientY)}
-                style={{ width: '100%', height: '150px', objectFit: 'contain', display: 'block', cursor: 'crosshair', borderRadius: 6 }}
+                onClick={handleSample}
+                style={{ width: '100%', height: '190px', objectFit: 'contain', display: 'block', cursor: 'crosshair', borderRadius: 6 }}
               />
+              <div style={{ position: 'absolute', top: 8, left: 8, display: 'flex', alignItems: 'center', gap: 5, padding: '5px 9px 5px 7px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', pointerEvents: 'none' }}>
+                <EyedropperIcon size={12} />
+                <span style={{ fontSize: 10 }}>Eyedropper</span>
+              </div>
+              {pickPoint && (
+                <div
+                  style={{
+                    position: 'absolute', left: pickPoint.xPct + '%', top: pickPoint.yPct + '%',
+                    transform: 'translate(-50%,-50%)', width: 30, height: 30, borderRadius: '50%',
+                    boxShadow: `0 0 0 2px #FFFFFF, 0 0 0 3px ${ink(0.5)}, 0 2px 8px rgba(0,0,0,.4)`,
+                    background: previewHex, pointerEvents: 'none',
+                  }}
+                />
+              )}
             </div>
             <button onClick={() => actions.extract()} style={{ width: '100%', marginTop: 9, padding: '11px 0', border: `1px solid ${ink(0.18)}`, borderRadius: 10, background: '#FFFFFF', fontSize: 12.5, color: INK, cursor: 'pointer' }}>
               Auto-Extract Colors
