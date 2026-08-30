@@ -3,7 +3,7 @@ import type { AppState } from '../types';
 import type { AppActions } from '../state/useAppState';
 import type { Derived } from '../state/useDerived';
 import { hsvToHex } from '../lib/color';
-import { ink, INK } from '../ui/tokens';
+import { ink, INK, starStyle } from '../ui/tokens';
 
 function EyedropperIcon({ size = 15 }: { size?: number }) {
   return (
@@ -22,7 +22,8 @@ export function ColorsScreen({
   actions: AppActions;
   imgRef: RefObject<HTMLImageElement | null>;
 }) {
-  const { previewHex, previewFamily, existing, colorGroups, isEmpty, emptyTitle, emptyNote, allTab, favTab } = derived;
+  const { previewHex, previewFamily, existing, colorGroups, isEmpty, emptyTitle, emptyNote } = derived;
+  const existingFav = starStyle(!!existing?.fav);
 
   const [pickPoint, setPickPoint] = useState<{ xPct: number; yPct: number } | null>(null);
   useEffect(() => { setPickPoint(null); }, [state.imageSrc]);
@@ -118,13 +119,24 @@ export function ColorsScreen({
         </div>
 
         {existing && (
-          <div
-            onClick={() => actions.openEntry(existing)}
-            style={{ marginTop: 11, display: 'flex', alignItems: 'center', gap: 9, padding: '10px 12px', border: `1px solid ${ink(0.12)}`, borderRadius: 11, background: '#FAFAFA', cursor: 'pointer' }}
-          >
+          <div style={{ marginTop: 11, display: 'flex', alignItems: 'center', gap: 8, padding: '10px 12px', border: `1px solid ${ink(0.12)}`, borderRadius: 11, background: '#FAFAFA' }}>
             <span style={{ width: 8, height: 8, borderRadius: '50%', flex: 'none', background: previewHex, boxShadow: `inset 0 0 0 1px ${ink(0.2)}` }} />
-            <span style={{ flex: 1, minWidth: 0, fontSize: 12, lineHeight: 1.4, color: ink(0.6) }}>{existing.note} · {new Date(existing.date).toLocaleDateString()}</span>
-            <span style={{ fontSize: 10, color: ink(0.4), flex: 'none' }}>Edit</span>
+            <div onClick={() => actions.openEntry(existing)} style={{ flex: 1, minWidth: 0, cursor: 'pointer' }}>
+              <span style={{ fontSize: 12, lineHeight: 1.4, color: ink(0.6) }}>{existing.note} · {new Date(existing.date).toLocaleDateString()}</span>
+            </div>
+            <button
+              onClick={() => actions.toggleFav(existing.id)}
+              title="Favorite"
+              style={{ flex: 'none', width: 28, height: 28, borderRadius: 8, cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, lineHeight: 1, border: existingFav.border, background: existingFav.bg, color: existingFav.color }}
+            >
+              {existingFav.glyph}
+            </button>
+            <button
+              onClick={() => actions.openAddUsage(existing.hex)}
+              style={{ flex: 'none', padding: '7px 11px', borderRadius: 8, border: `1px solid ${ink(0.18)}`, background: '#FFFFFF', fontSize: 11.5, color: INK, cursor: 'pointer', whiteSpace: 'nowrap' }}
+            >
+              + Add
+            </button>
           </div>
         )}
 
@@ -168,20 +180,15 @@ export function ColorsScreen({
 
       <div style={{ padding: '20px 22px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
         <div style={{ fontSize: 19, fontWeight: 600 }}>Your Colors</div>
-        <div style={{ display: 'flex', gap: 3, padding: 3, background: ink(0.055), borderRadius: 9, flex: 'none' }}>
-          <button
-            onClick={() => actions.patch({ gridFilter: 'all' })}
-            style={{ border: 'none', borderRadius: 7, padding: '6px 11px', fontSize: 11, cursor: 'pointer', whiteSpace: 'nowrap', background: allTab.bg, color: allTab.color, boxShadow: allTab.shadow }}
-          >
-            All
-          </button>
-          <button
-            onClick={() => actions.patch({ gridFilter: 'favs' })}
-            style={{ border: 'none', borderRadius: 7, padding: '6px 11px', fontSize: 11, cursor: 'pointer', whiteSpace: 'nowrap', background: favTab.bg, color: favTab.color, boxShadow: favTab.shadow }}
-          >
-            ★ Favorites
-          </button>
-        </div>
+        <select
+          value={state.gridFilter}
+          onChange={(e) => actions.patch({ gridFilter: e.target.value as typeof state.gridFilter })}
+          style={{ border: `1px solid ${ink(0.16)}`, borderRadius: 8, padding: '6px 9px', fontSize: 11, color: INK, background: '#FAFAFA', cursor: 'pointer', flex: 'none' }}
+        >
+          <option value="all">All</option>
+          <option value="most">Most used</option>
+          <option value="least">Least used</option>
+        </select>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '0 22px 96px' }}>

@@ -46,9 +46,9 @@ export function useDerived(state: AppState) {
           .map((c) => ({ hex: c.hex.toUpperCase(), note: c.note, dateLabel: dateLabel(c.date), fav: !!c.fav, raw: c }))
       : [];
 
-    const showFavs = state.gridFilter === 'favs';
-    const allGroups = groupByColor(acc.log);
-    const colorGroups = showFavs ? allGroups.filter((g) => g.fav) : allGroups;
+    const colorGroups = groupByColor(acc.log);
+    if (state.gridFilter === 'most') colorGroups.sort((a, b) => b.count - a.count);
+    else if (state.gridFilter === 'least') colorGroups.sort((a, b) => a.count - b.count);
 
     const selectedCount = state.extractNew.filter((x) => state.extractPicked[x]).length;
     const allSelected = state.extractNew.length > 0 && selectedCount === state.extractNew.length;
@@ -114,15 +114,10 @@ export function useDerived(state: AppState) {
       uniqueColors: uniqueColorCount(acc.log),
       header: headers[state.screen],
 
-      showFavs,
       colorGroups,
       isEmpty: colorGroups.length === 0,
-      emptyTitle: showFavs ? 'No favorites yet' : 'Nothing logged yet',
-      emptyNote: showFavs
-        ? 'Tap the star when you log a color to keep it here.'
-        : 'Pick a color above and mark it as used. Every entry finds its own family.',
-      allTab: { bg: showFavs ? 'transparent' : '#FFFFFF', color: showFavs ? 'rgba(28,27,26,.5)' : '#1C1B1A', shadow: showFavs ? 'none' : '0 1px 3px rgba(28,27,26,.14)' },
-      favTab: { bg: showFavs ? '#FFFFFF' : 'transparent', color: showFavs ? '#1C1B1A' : 'rgba(28,27,26,.5)', shadow: showFavs ? '0 1px 3px rgba(28,27,26,.14)' : 'none' },
+      emptyTitle: 'Nothing logged yet',
+      emptyNote: 'Pick a color above and mark it as used. Every entry finds its own family.',
 
       favCountLabel: favs.length === 1 ? '1 color' : favs.length + ' colors',
       favPreview: favs.slice(0, 4),

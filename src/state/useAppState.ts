@@ -150,6 +150,15 @@ export function useAppState() {
     toast('Removed from log', '#8A8785');
   }, [toast]);
 
+  // Flips fav on one entry directly, no sheet — for quick star toggles wherever they show up.
+  const toggleFav = useCallback((id: string) => {
+    setState((st) => {
+      if (!st.account) return st;
+      const log = st.account.log.map((c) => (c.id === id ? { ...c, fav: !c.fav } : c));
+      return { ...st, account: { ...st.account, log } };
+    });
+  }, []);
+
   const openAddUsage = useCallback((hex: string) => {
     patch({ addUsageHex: hex.toUpperCase(), addUsageNote: '', addUsageDate: todayISO(), addUsageFav: false });
   }, [patch]);
@@ -245,10 +254,10 @@ export function useAppState() {
 
   const actions = useMemo(() => ({
     patch, updateAccount, toast, signIn, setFromHex, setFromHsv, save,
-    openEntry, saveEntry, removeEntry, openAddUsage, saveAddUsage, onFile, sampleFromImage, extract,
+    openEntry, saveEntry, removeEntry, toggleFav, openAddUsage, saveAddUsage, onFile, sampleFromImage, extract,
     addBatch, onAvatarFile, saveProfile, logout,
   }), [patch, updateAccount, toast, signIn, setFromHex, setFromHsv, save,
-    openEntry, saveEntry, removeEntry, openAddUsage, saveAddUsage, onFile, sampleFromImage, extract,
+    openEntry, saveEntry, removeEntry, toggleFav, openAddUsage, saveAddUsage, onFile, sampleFromImage, extract,
     addBatch, onAvatarFile, saveProfile, logout]);
 
   return { state, actions, imgRef };
