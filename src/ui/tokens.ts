@@ -35,6 +35,7 @@ export const ghostButton: React.CSSProperties = {
   fontSize: 12.5,
   cursor: 'pointer',
   padding: '9px 0',
+  marginTop: 8,
 };
 
 export const sheetWrap: React.CSSProperties = {

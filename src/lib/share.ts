@@ -16,7 +16,7 @@ export function buildShareCard(name: string, joined: string, log: LogEntry[]): s
 
   c.fillStyle = 'rgba(28,27,26,0.45)';
   c.font = '500 22px Inter, sans-serif';
-  c.fillText('C O L O U R   R E M A I N S', 110, 150);
+  c.fillText('C O L O R   R E M A I N S', 110, 150);
 
   c.fillStyle = '#1C1B1A';
   c.font = '500 74px Inter, sans-serif';
@@ -53,7 +53,7 @@ export function buildShareCard(name: string, joined: string, log: LogEntry[]): s
   c.textAlign = 'left';
   c.fillStyle = 'rgba(28,27,26,0.4)';
   c.font = '22px Inter, sans-serif';
-  c.fillText('colourremains.app', 110, 592);
+  c.fillText('colorremains.app', 110, 592);
 
   return cv.toDataURL('image/png');
 }
