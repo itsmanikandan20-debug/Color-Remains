@@ -92,7 +92,7 @@ export function useDerived(state: AppState) {
     const overallPct = (uniqueColorCount(acc.log) / 16777216 * 100).toFixed(5).replace(/0+$/, '').replace(/\.$/, '') + '%';
 
     const headers: Record<string, [string, string, string]> = {
-      colors: ['', 'Colour Remains', ''],
+      colors: ['', 'Color Remains', ''],
       balance: ['', 'My Journey', ''],
       profile: ['', 'Profile', 'v1.0'],
     };

@@ -9,12 +9,12 @@ export function AuthScreen({ state, actions }: { state: AppState; actions: AppAc
     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'flex-start', padding: '56px 30px 40px', animation: 'cbIn .3s ease' }}>
       <img
         src="/logo-small.png"
-        alt="Colour Remains"
+        alt="Color Remains"
         style={{ height: 74, width: 'auto', display: 'block', marginBottom: 20, objectFit: 'scale-down' }}
       />
-      <div style={{ fontSize: 38, lineHeight: 1.05, letterSpacing: '-.02em', fontWeight: 600 }}>Colour Remains</div>
+      <div style={{ fontSize: 38, lineHeight: 1.05, letterSpacing: '-.02em', fontWeight: 600 }}>Color Remains</div>
       <div style={{ fontSize: 13.5, lineHeight: 1.55, color: ink(0.6), marginTop: 11, maxWidth: 280 }}>
-        Your log lives with your account. Sign in on any device and every swatch, note and date comes back.
+        Your personal record of the colours you use. Save them, revisit them, and see where they’ve been used.
       </div>
 
       <div style={{ marginTop: 26, display: 'flex', flexDirection: 'column', gap: 10 }}>
