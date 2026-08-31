@@ -9,7 +9,7 @@ export function ExtractSheet({ state, derived, actions }: {
   actions: AppActions;
 }) {
   if (!state.extractOpen) return null;
-  const { selectedCount, allSelected, countByHex } = derived;
+  const { selectedCount, allNewSelected, allDupesSelected, countByHex } = derived;
   const close = () => actions.patch({ extractOpen: false });
 
   const toggle = (hex: string) => {
@@ -19,11 +19,13 @@ export function ExtractSheet({ state, derived, actions }: {
       return { extractPicked: p };
     });
   };
-  const selectAll = () => {
+  // Each "Select all" only ever adds/removes keys belonging to its own
+  // section, so the other section's picks are never touched.
+  const selectAllIn = (list: string[]) => {
     actions.patch((st) => {
-      if (st.extractNew.length > 0 && st.extractNew.every((x) => st.extractPicked[x])) return { extractPicked: {} };
-      const p: Record<string, boolean> = {};
-      st.extractNew.forEach((x) => { p[x] = true; });
+      const allSel = list.length > 0 && list.every((x) => st.extractPicked[x]);
+      const p = { ...st.extractPicked };
+      list.forEach((x) => { if (allSel) delete p[x]; else p[x] = true; });
       return { extractPicked: p };
     });
   };
@@ -43,8 +45,8 @@ export function ExtractSheet({ state, derived, actions }: {
             <div style={{ fontSize: 10, color: ink(0.45), marginTop: 3 }}>{state.extractNew.length} new · {state.extractDupes.length} already logged</div>
           </div>
           <div style={{ display: 'flex', gap: 7, flex: 'none' }}>
-            <button onClick={selectAll} style={{ border: `1px solid ${ink(0.16)}`, background: '#FAFAFA', borderRadius: 8, padding: '6px 11px', fontSize: 11.5, cursor: 'pointer', color: INK }}>
-              {allSelected ? 'Clear all' : 'Select all'}
+            <button onClick={() => selectAllIn(state.extractNew)} style={{ border: `1px solid ${ink(0.16)}`, background: '#FAFAFA', borderRadius: 8, padding: '6px 11px', fontSize: 11.5, cursor: 'pointer', color: INK }}>
+              {allNewSelected ? 'Deselect all' : 'Select all'}
             </button>
             <button onClick={close} style={{ border: `1px solid ${ink(0.16)}`, background: '#FAFAFA', borderRadius: 8, padding: '6px 11px', fontSize: 11.5, cursor: 'pointer', color: INK }}>Close</button>
           </div>
@@ -74,20 +76,31 @@ export function ExtractSheet({ state, derived, actions }: {
 
           {state.extractDupes.length > 0 && (
             <>
-              <div style={{ fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: ink(0.42), margin: '22px 0 9px' }}>Already logged — tap to add a use</div>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', margin: '22px 0 9px' }}>
+                <div style={{ fontSize: 9.5, letterSpacing: '.16em', textTransform: 'uppercase', color: ink(0.42) }}>Already logged</div>
+                <button onClick={() => selectAllIn(state.extractDupes)} style={{ border: `1px solid ${ink(0.16)}`, background: '#FAFAFA', borderRadius: 7, padding: '4px 9px', fontSize: 10, cursor: 'pointer', color: INK, flex: 'none' }}>
+                  {allDupesSelected ? 'Deselect all' : 'Select all'}
+                </button>
+              </div>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
-                {state.extractDupes.map((hex) => (
-                  <div key={hex} onClick={() => actions.openAddUsage(hex)} style={{ opacity: 0.7, cursor: 'pointer' }}>
-                    <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 10, background: hex, boxShadow: `inset 0 0 0 1px ${ink(0.12)}`, filter: 'grayscale(.4)' }}>
-                      {countByHex[hex] > 1 && (
-                        <div style={{ position: 'absolute', bottom: 3, right: 3, minWidth: 15, height: 15, padding: '0 3px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                          ×{countByHex[hex]}
-                        </div>
-                      )}
+                {state.extractDupes.map((hex) => {
+                  const selected = !!state.extractPicked[hex];
+                  return (
+                    <div key={hex} onClick={() => toggle(hex)} style={{ cursor: 'pointer' }}>
+                      <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 10, background: hex, boxShadow: selected ? `inset 0 0 0 2px ${INK}` : `inset 0 0 0 1px ${ink(0.12)}`, filter: selected ? 'none' : 'grayscale(.4)', opacity: selected ? 1 : 0.7 }}>
+                        {selected && (
+                          <div style={{ position: 'absolute', top: 4, right: 4, width: 18, height: 18, borderRadius: '50%', background: INK, color: '#FFFFFF', fontSize: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', animation: 'cbTick .3s cubic-bezier(.2,.9,.3,1)' }}>✓</div>
+                        )}
+                        {countByHex[hex] > 1 && (
+                          <div style={{ position: 'absolute', bottom: 3, right: 3, minWidth: 15, height: 15, padding: '0 3px', borderRadius: 999, background: 'rgba(28,27,26,.72)', color: '#FFFFFF', fontSize: 9, fontWeight: 600, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                            ×{countByHex[hex]}
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ fontSize: 8.5, color: ink(0.45), marginTop: 4, textAlign: 'center' }}>{hex.replace('#', '')}</div>
                     </div>
-                    <div style={{ fontSize: 8, color: ink(0.45), marginTop: 4, textAlign: 'center' }}>+ Add use</div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             </>
           )}
@@ -104,7 +117,7 @@ export function ExtractSheet({ state, derived, actions }: {
             onClick={() => actions.addBatch()}
             style={{ width: '100%', marginTop: 9, padding: '13px 0', border: 'none', borderRadius: 11, fontSize: 13.5, fontWeight: 500, cursor: 'pointer', background: selectedCount ? INK : ink(0.09), color: selectedCount ? '#FFFFFF' : ink(0.4) }}
           >
-            {selectedCount ? `Add Selected (${selectedCount})` : 'Select colors to add'}
+            {selectedCount ? `Add ${selectedCount} color${selectedCount === 1 ? '' : 's'}` : 'Select colors to add'}
           </button>
           <div style={{ fontSize: 11, color: ink(0.42), marginTop: 8, textAlign: 'center' }}>One name applies to every color in this batch.</div>
         </div>

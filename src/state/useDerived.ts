@@ -61,8 +61,11 @@ export function useDerived(state: AppState) {
     const countByHex: Record<string, number> = {};
     colorGroups.forEach((g) => { countByHex[g.hex] = g.count; });
 
-    const selectedCount = state.extractNew.filter((x) => state.extractPicked[x]).length;
-    const allSelected = state.extractNew.length > 0 && selectedCount === state.extractNew.length;
+    const selectedNewCount = state.extractNew.filter((x) => state.extractPicked[x]).length;
+    const allNewSelected = state.extractNew.length > 0 && selectedNewCount === state.extractNew.length;
+    const selectedDupeCount = state.extractDupes.filter((x) => state.extractPicked[x]).length;
+    const allDupesSelected = state.extractDupes.length > 0 && selectedDupeCount === state.extractDupes.length;
+    const selectedCount = selectedNewCount + selectedDupeCount;
 
     const detailEntries = state.detailHex
       ? acc.log.filter((c) => c.hex.toUpperCase() === state.detailHex).sort((a, b) => (a.date < b.date ? 1 : -1))
@@ -114,7 +117,10 @@ export function useDerived(state: AppState) {
       sheetEmpty: !!sheetName && sheetItems.length === 0,
       sheetEmptyNote: (sheetName && EMPTY_NOTES[sheetName]) || 'Nothing logged in this family yet.',
       selectedCount,
-      allSelected,
+      selectedNewCount,
+      allNewSelected,
+      selectedDupeCount,
+      allDupesSelected,
       detailEntries,
       detailFamily,
       detailFav,

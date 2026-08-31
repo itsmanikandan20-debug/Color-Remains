@@ -211,7 +211,7 @@ export function useAppState() {
     let firstHex: string | undefined;
     setState((st) => {
       if (!st.account) return st;
-      const chosen = st.extractNew.filter((x) => st.extractPicked[x]);
+      const chosen = [...st.extractNew, ...st.extractDupes].filter((x) => st.extractPicked[x]);
       if (!chosen.length) return st;
       count = chosen.length;
       firstHex = chosen[0];
