@@ -21,7 +21,7 @@ function createAccount(email: string): Account {
     email,
     name: isDemo ? 'Mani' : nameFromEmail(email),
     bio: isDemo
-      ? 'Product designer. Ten years of apps, posters and identities. Keeping an honest record of what I actually reach for.'
+      ? 'A record of the colours I actually use across my design work.'
       : 'Say something about your design work.',
     avatar: null,
     joined: isDemo ? '2023-11-01' : todayISO(),

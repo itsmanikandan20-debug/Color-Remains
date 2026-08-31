@@ -32,7 +32,7 @@ export const SAMPLE: Omit<LogEntry, 'id'>[] = [
 export const DEMO_ACCOUNT = {
   name: 'Mani',
   email: 'mani@studio.com',
-  bio: 'Product designer. Ten years of apps, posters and identities. Keeping an honest record of what I actually reach for.',
+  bio: 'A record of the colours I actually use across my design work.',
   avatar: null as string | null,
   joined: '2023-11-01',
 };
