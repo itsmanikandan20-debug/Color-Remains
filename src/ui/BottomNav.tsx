@@ -61,7 +61,7 @@ export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen
           style={{ flex: 1, cursor: 'pointer', height: 52, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5, fontSize: 10.5, fontWeight: 500, color: pillColor('balance'), transition: 'color .2s ease' }}
         >
           <span style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s ease', background: pillBg('balance'), color: iconColor('balance') }}>
-            <JourneyIcon />
+            <JourneyIcon size={19} />
           </span>
           <span style={{ whiteSpace: 'nowrap', opacity: labelOpacity('balance') }}>Journey</span>
         </div>
@@ -73,7 +73,7 @@ export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen
           style={{ flex: 1, cursor: 'pointer', height: 52, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5, fontSize: 10.5, fontWeight: 500, color: pillColor('profile'), transition: 'color .2s ease' }}
         >
           <span style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s ease', background: pillBg('profile'), color: iconColor('profile') }}>
-            <UserIcon />
+            <UserIcon size={19} />
           </span>
           <span style={{ whiteSpace: 'nowrap', opacity: labelOpacity('profile') }}>Profile</span>
         </div>
@@ -90,7 +90,7 @@ export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen
           }}
         >
           <span style={{ color: centerFg, display: 'block' }}>
-            <PaletteIcon />
+            <PaletteIcon size={25} />
           </span>
         </div>
       </div>
