@@ -23,9 +23,9 @@ function UserIcon({ size = 16 }: { size?: number }) {
 }
 
 export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen) => void }) {
-  const pillRing = (k: Screen) => (screen === k ? `inset 0 0 0 1.5px ${INK}` : 'none');
+  const pillBg = (k: Screen) => (screen === k ? INK : 'transparent');
   const pillColor = (k: Screen) => (screen === k ? INK : ink(0.45));
-  const iconColor = (k: Screen) => (screen === k ? INK : ink(0.45));
+  const iconColor = (k: Screen) => (screen === k ? '#FFFFFF' : ink(0.45));
   const labelOpacity = (k: Screen) => (screen === k ? 1 : 0.75);
   const centerBg = screen === 'colors' ? INK : ink(0.82);
   const centerFg = screen === 'colors' ? '#FFFFFF' : 'rgba(255,255,255,.85)';
@@ -50,7 +50,7 @@ export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen
           onClick={() => onNav('balance')}
           style={{ flex: 1, cursor: 'pointer', height: 52, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5, fontSize: 10.5, fontWeight: 500, color: pillColor('balance'), transition: 'color .2s ease' }}
         >
-          <span style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'box-shadow .2s ease, color .2s ease', boxShadow: pillRing('balance'), color: iconColor('balance') }}>
+          <span style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s ease', background: pillBg('balance'), color: iconColor('balance') }}>
             <span style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 11 }}>
               <span style={{ width: 2.5, height: 6, background: 'currentColor', display: 'inline-block', borderRadius: 1 }} />
               <span style={{ width: 2.5, height: 11, background: 'currentColor', display: 'inline-block', borderRadius: 1 }} />
@@ -66,7 +66,7 @@ export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen
           onClick={() => onNav('profile')}
           style={{ flex: 1, cursor: 'pointer', height: 52, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5, fontSize: 10.5, fontWeight: 500, color: pillColor('profile'), transition: 'color .2s ease' }}
         >
-          <span style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'box-shadow .2s ease, color .2s ease', boxShadow: pillRing('profile'), color: iconColor('profile') }}>
+          <span style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s ease', background: pillBg('profile'), color: iconColor('profile') }}>
             <UserIcon />
           </span>
           <span style={{ whiteSpace: 'nowrap', opacity: labelOpacity('profile') }}>Profile</span>
