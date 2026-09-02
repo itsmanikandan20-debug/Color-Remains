@@ -42,8 +42,10 @@ const initialState: AppState = {
   screen: 'colors',
   range: 'lifetime',
 
-  h: 214, s: 73, v: 67,
-  hexInput: '#2E5AAC', exact: '#2E5AAC',
+  // Not a color in SAMPLE/DEMO_ACCOUNT's log, so the app opens on "Mark as
+  // Used" rather than looking like this color was already logged.
+  h: 214, s: 73, v: 60,
+  hexInput: '#295A99', exact: '#295A99',
 
   noteOpen: false, note: '', date: todayISO(), fav: false,
 
