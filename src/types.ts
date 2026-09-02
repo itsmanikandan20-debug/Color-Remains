@@ -63,6 +63,7 @@ export type AppState = {
   addUsageDate: string;
 
   gridFilter: GridFilter;
+  gridSearch: string;
   favSheetOpen: boolean;
 
   extractOpen: boolean;

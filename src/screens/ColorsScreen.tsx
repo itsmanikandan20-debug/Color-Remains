@@ -14,6 +14,14 @@ function EyedropperIcon({ size = 15 }: { size?: number }) {
   );
 }
 
+function FilterIcon({ size = 15 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <path d="M3 5h14M6 10h8M9 15h2" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function ColorsScreen({
   state, derived, actions, imgRef,
 }: {
@@ -22,7 +30,7 @@ export function ColorsScreen({
   actions: AppActions;
   imgRef: RefObject<HTMLImageElement | null>;
 }) {
-  const { previewHex, previewFamily, existing, colorGroups, isEmpty, emptyTitle, emptyNote } = derived;
+  const { previewHex, previewFamily, existing, gridGroups, gridNoMatches, isEmpty, emptyTitle, emptyNote } = derived;
 
   const [pickPoint, setPickPoint] = useState<{ xPct: number; yPct: number } | null>(null);
   useEffect(() => { setPickPoint(null); }, [state.imageSrc]);
@@ -168,17 +176,31 @@ export function ColorsScreen({
         )}
       </div>
 
-      <div style={{ padding: '20px 22px 8px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 10 }}>
+      <div style={{ padding: '20px 22px 10px' }}>
         <div style={{ fontSize: 19, fontWeight: 600 }}>Your Colors</div>
-        <select
-          value={state.gridFilter}
-          onChange={(e) => actions.patch({ gridFilter: e.target.value as typeof state.gridFilter })}
-          style={{ border: `1px solid ${ink(0.16)}`, borderRadius: 8, padding: '6px 9px', fontSize: 11, color: INK, background: '#FAFAFA', cursor: 'pointer', flex: 'none' }}
-        >
-          <option value="newest">Newly added</option>
-          <option value="most">Most used</option>
-          <option value="least">Least used</option>
-        </select>
+        <div style={{ marginTop: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
+          <input
+            value={state.gridSearch}
+            onChange={(e) => actions.patch({ gridSearch: e.target.value })}
+            placeholder="Search by project name"
+            style={{ flex: 1, minWidth: 0, padding: '9px 12px', border: `1px solid ${ink(0.16)}`, borderRadius: 9, background: '#FAFAFA', fontSize: 12.5, color: INK, outline: 'none' }}
+          />
+          <div style={{ position: 'relative', width: 34, height: 34, flex: 'none' }}>
+            <div style={{ width: 34, height: 34, borderRadius: 9, border: `1px solid ${ink(0.16)}`, background: '#FAFAFA', display: 'flex', alignItems: 'center', justifyContent: 'center', color: ink(0.55) }}>
+              <FilterIcon />
+            </div>
+            <select
+              value={state.gridFilter}
+              onChange={(e) => actions.patch({ gridFilter: e.target.value as typeof state.gridFilter })}
+              title="Sort colors"
+              style={{ position: 'absolute', inset: 0, opacity: 0, border: 'none', cursor: 'pointer' }}
+            >
+              <option value="newest">Newly added</option>
+              <option value="most">Most used</option>
+              <option value="least">Least used</option>
+            </select>
+          </div>
+        </div>
       </div>
 
       <div style={{ flex: 1, overflowY: 'auto', padding: '0 22px 96px' }}>
@@ -188,8 +210,14 @@ export function ColorsScreen({
             <div style={{ fontSize: 12.5, lineHeight: 1.55, color: ink(0.55) }}>{emptyNote}</div>
           </div>
         )}
+        {gridNoMatches && (
+          <div style={{ border: `1px dashed ${ink(0.22)}`, borderRadius: 14, padding: '30px 22px', textAlign: 'center' }}>
+            <div style={{ fontSize: 17, marginBottom: 6, fontWeight: 600 }}>No matches</div>
+            <div style={{ fontSize: 12.5, lineHeight: 1.55, color: ink(0.55) }}>No project names match “{state.gridSearch.trim()}”.</div>
+          </div>
+        )}
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 10 }}>
-          {colorGroups.map((g) => (
+          {gridGroups.map((g) => (
             <div key={g.hex} onClick={() => actions.patch({ detailHex: g.hex })} style={{ cursor: 'pointer' }}>
               <div style={{ position: 'relative', aspectRatio: '1', borderRadius: 10, boxShadow: `inset 0 0 0 1px ${ink(0.12)}`, background: g.hex }}>
                 {g.fav && (

@@ -61,6 +61,14 @@ export function useDerived(state: AppState) {
     const countByHex: Record<string, number> = {};
     colorGroups.forEach((g) => { countByHex[g.hex] = g.count; });
 
+    // Search narrows what the main grid shows without touching countByHex —
+    // usage badges elsewhere should still reflect the full log.
+    const searchQuery = state.gridSearch.trim().toLowerCase();
+    const gridGroups = searchQuery
+      ? colorGroups.filter((g) => g.entries.some((e) => e.note.toLowerCase().includes(searchQuery)))
+      : colorGroups;
+    const gridNoMatches = !!searchQuery && gridGroups.length === 0 && colorGroups.length > 0;
+
     const selectedNewCount = state.extractNew.filter((x) => state.extractPicked[x]).length;
     const allNewSelected = state.extractNew.length > 0 && selectedNewCount === state.extractNew.length;
     const selectedDupeCount = state.extractDupes.filter((x) => state.extractPicked[x]).length;
@@ -132,6 +140,8 @@ export function useDerived(state: AppState) {
       header: headers[state.screen],
 
       colorGroups,
+      gridGroups,
+      gridNoMatches,
       countByHex,
       isEmpty: colorGroups.length === 0,
       emptyTitle: 'Nothing logged yet',
