@@ -177,7 +177,7 @@ export function ColorsScreen({
       </div>
 
       <div style={{ padding: '20px 22px 10px' }}>
-        <div style={{ fontSize: 19, fontWeight: 600 }}>Your Colors</div>
+        <div style={{ fontSize: 19, fontWeight: 600 }}>Saved Colors</div>
         <div style={{ marginTop: 10, display: 'flex', gap: 8, alignItems: 'center' }}>
           <input
             value={state.gridSearch}

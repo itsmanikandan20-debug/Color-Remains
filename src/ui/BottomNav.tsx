@@ -13,6 +13,16 @@ function PaletteIcon({ size = 22 }: { size?: number }) {
   );
 }
 
+function JourneyIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
+      <rect x="3" y="10" width="3" height="6" rx="0.6" stroke="currentColor" strokeWidth="1.4" />
+      <rect x="8.5" y="5" width="3" height="11" rx="0.6" stroke="currentColor" strokeWidth="1.4" />
+      <rect x="14" y="12" width="3" height="4" rx="0.6" stroke="currentColor" strokeWidth="1.4" />
+    </svg>
+  );
+}
+
 function UserIcon({ size = 16 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 20 20" fill="none">
@@ -51,11 +61,7 @@ export function BottomNav({ screen, onNav }: { screen: Screen; onNav: (s: Screen
           style={{ flex: 1, cursor: 'pointer', height: 52, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 5, fontSize: 10.5, fontWeight: 500, color: pillColor('balance'), transition: 'color .2s ease' }}
         >
           <span style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background .2s ease', background: pillBg('balance'), color: iconColor('balance') }}>
-            <span style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 11 }}>
-              <span style={{ width: 2.5, height: 6, background: 'currentColor', display: 'inline-block', borderRadius: 1 }} />
-              <span style={{ width: 2.5, height: 11, background: 'currentColor', display: 'inline-block', borderRadius: 1 }} />
-              <span style={{ width: 2.5, height: 4, background: 'currentColor', display: 'inline-block', borderRadius: 1 }} />
-            </span>
+            <JourneyIcon />
           </span>
           <span style={{ whiteSpace: 'nowrap', opacity: labelOpacity('balance') }}>Journey</span>
         </div>
