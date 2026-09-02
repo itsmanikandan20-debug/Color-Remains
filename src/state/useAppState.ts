@@ -114,7 +114,7 @@ export function useAppState() {
   }, []);
 
   // Only reachable for a color with no existing entry (the picker shows
-  // "Already used" and routes to Add Usage instead once one exists), but this
+  // "Already saved" and routes to Add Usage instead once one exists), but this
   // never dedupes by hex — every save is a new entry, preserving history.
   const save = useCallback(() => {
     setState((st) => {

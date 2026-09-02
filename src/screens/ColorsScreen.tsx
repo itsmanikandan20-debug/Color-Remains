@@ -49,7 +49,7 @@ export function ColorsScreen({
   const satTrack = `linear-gradient(90deg,${hsvToHex(state.h, 0, state.v)},${hsvToHex(state.h, 100, state.v)})`;
   const valTrack = `linear-gradient(90deg,#1C1B1A,${hsvToHex(state.h, state.s, 100)})`;
 
-  const markLabel = existing ? 'Already used ✓' : 'Mark as Used';
+  const markLabel = existing ? 'Already saved ✓' : 'Save Color';
   const markBg = existing ? 'transparent' : INK;
   const markColor = existing ? ink(0.55) : '#FFFFFF';
   const markBorder = existing ? `1px solid ${ink(0.18)}` : 'none';
